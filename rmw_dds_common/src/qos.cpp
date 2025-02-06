@@ -214,6 +214,27 @@ qos_profile_check_compatible(
     }
   }
 
+  // ===================================================
+  /*
+  * FRoST Implementation of Ownership QoS
+  * -------------------------------------
+  * TODO: checck if statement - possible, that default + shared works
+  * but this check will result in false in this circumstance
+  */
+  // Onwership kind is same in publisher and subscriber
+  if (publisher_qos.ownership != subscription_qos.ownership)
+  {
+    *compatibility = RMW_QOS_COMPATIBILITY_ERROR;
+    rmw_ret_t append_ret = _append_to_buffer(
+      reason,
+      reason_size,
+      "ERROR: Publisher and Subscriber don't have the same ownership kind;");
+    if (RMW_RET_OK != append_ret) {
+      return append_ret;
+    }  
+  }
+  // ===================================================
+
   // Only check for warnings if there are no errors
   if (RMW_QOS_COMPATIBILITY_OK == *compatibility) {
     // We don't know the policy if the value is "system default" or "unknown"
@@ -235,6 +256,18 @@ qos_profile_check_compatible(
     const bool sub_liveliness_unknown =
       subscription_qos.liveliness == RMW_QOS_POLICY_LIVELINESS_SYSTEM_DEFAULT ||
       subscription_qos.liveliness == RMW_QOS_POLICY_LIVELINESS_UNKNOWN;
+    // ===================================================
+    /*
+    * FRoST Implementation of Ownership QoS
+    * -------------------------------------
+    */
+    const bool pub_ownership_unknown =
+      publisher_qos.ownership == RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT ||
+      publisher_qos.ownership == RMW_QOS_POLICY_OWNERSHIP_UNKNOWN;
+    const bool sub_ownership_unknown = 
+      subscription_qos.ownership == RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT ||
+      subscription_qos.ownership == RMW_QOS_POLICY_OWNERSHIP_UNKNOWN;
+    // ===================================================
 
     const char * pub_reliability_str = rmw_qos_reliability_policy_to_str(publisher_qos.reliability);
     if (!pub_reliability_str) {
@@ -261,6 +294,20 @@ qos_profile_check_compatible(
     if (!sub_liveliness_str) {
       sub_liveliness_str = "unknown";
     }
+    // ===================================================
+    /*
+    * FRoST Implementation of Ownership QoS
+    * -------------------------------------
+    */
+    const char * pub_ownership_str = rmw_qos_ownership_policy_to_str(publisher_qos.ownership);
+    if (!pub_ownership_str) {
+      pub_ownership_str = "unknown";
+    }
+    const char * sub_ownership_str = rmw_qos_ownership_policy_to_str(subscription_qos.ownership);
+    if (!sub_ownership_str) {
+      sub_ownership_str = "unknown";
+    }
+    // ===================================================
 
     // Reliability warnings
     if (pub_reliability_unknown && sub_reliability_unknown) {
@@ -384,6 +431,27 @@ qos_profile_check_compatible(
         return ret;
       }
     }
+    // ===================================================
+    /*
+    * FRoST Implementation of Ownership QoS
+    * -------------------------------------
+    * check, if warnings are needed. 
+    */
+    // Ownership warnings
+    if (pub_ownership_unknown || sub_ownership_unknown) {
+      // ownership hasn't been set yet (prob. system_default)
+      *compatibility = RMW_QOS_COMPATIBILITY_WARNING;
+      rmw_ret_t append_ret = _append_to_buffer(
+        reason,
+        reason_size,
+        "WARNING: Publisher's or subscriber's ownership kind isn't set;",
+        pub_liveliness_str,
+        sub_liveliness_str);
+      if (RMW_RET_OK != append_ret) {
+        return append_ret;
+      }
+    }
+    // ===================================================
   }
 
   return RMW_RET_OK;
@@ -560,6 +628,15 @@ qos_profile_get_best_available_for_publisher(
   return RMW_RET_OK;
 }
 
+
+// ===================================================
+/*
+* FRoST Implementation of Ownership QoS
+* -------------------------------------
+* TODO: check, if following function will throw error if ownership
+* isn*t added
+*/
+// ===================================================
 static bool
 _qos_profile_has_best_available_policy(const rmw_qos_profile_t & qos_profile)
 {

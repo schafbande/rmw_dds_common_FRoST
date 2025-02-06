@@ -85,6 +85,8 @@ qos_profile_check_compatible(
  * Otherwise, liveliness lease duration will be set to the maximum deadline of all publishers.
  *
  * History, history depth, and lifespan policies are not changed by this function.
+ * 
+ * Ownership is not changed by this function.
  *
  * \param[in] publishers_info: Endpoint information for publishers.
  * \param[out] subscription_profile: QoS profile that is compatible with the majority of
@@ -122,6 +124,8 @@ qos_profile_get_best_available_for_subscription(
  *
  * History, history depth, and lifespan policies are not changed by this function.
  *
+ * Ownership is not changed by this function.
+ * 
  * \param[in] subscriptions_info: Endpoint information for subscriptions.
  * \param[out] publisher_profile: QoS profile that is compatible with the majority of
  *   the input subscriptions.
