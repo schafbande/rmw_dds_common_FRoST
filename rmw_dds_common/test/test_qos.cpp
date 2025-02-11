@@ -36,7 +36,18 @@ get_qos_profile_fixture()
     RMW_QOS_LIFESPAN_DEFAULT,
     RMW_QOS_POLICY_LIVELINESS_AUTOMATIC,
     RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
-    false
+    false,
+    // ===================================================
+    /*
+    * FRoST Implementation of Ownership QoS
+    * -------------------------------------
+    * for all test cases: default ownership (shared) and no strength
+    */
+    // set ownership to default (shared)
+    RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+    // since it's shared ownership, no ownership strength needed
+    0  //<-- no ownership strengths
+    // ===================================================
   };
 }
 
@@ -805,7 +816,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_subscription)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC,
       RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     rmw_qos_profile_t subscription_profile = rmw_qos_profile_best_available;
     rmw_ret_t ret = rmw_dds_common::qos_profile_get_best_available_for_subscription(
@@ -844,7 +866,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_subscription)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_AUTOMATIC,  // should result in "automatic" for subscription
       {1u, 0u},
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     publishers_info.info_array[1].qos_profile = {
       RMW_QOS_POLICY_HISTORY_KEEP_ALL,
@@ -855,7 +888,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_subscription)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC,
       RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     publishers_info.info_array[2].qos_profile = {
       RMW_QOS_POLICY_HISTORY_KEEP_ALL,
@@ -866,7 +910,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_subscription)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC,
       {2u, 0u},  // should appear in subscription QoS because it is the largest
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     rmw_qos_profile_t subscription_profile = rmw_qos_profile_best_available;
     rmw_ret_t ret = rmw_dds_common::qos_profile_get_best_available_for_subscription(
@@ -953,7 +1008,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_publisher)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC,
       RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     rmw_qos_profile_t publisher_profile = rmw_qos_profile_best_available;
     rmw_ret_t ret = rmw_dds_common::qos_profile_get_best_available_for_publisher(
@@ -992,7 +1058,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_publisher)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_AUTOMATIC,
       {1u, 0u},  // should appear in publisher QoS because it is the smallest
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     subscriptions_info.info_array[1].qos_profile = {
       RMW_QOS_POLICY_HISTORY_KEEP_ALL,
@@ -1003,7 +1080,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_publisher)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_MANUAL_BY_TOPIC,  // should result in "manual by topic" for pub
       RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     subscriptions_info.info_array[2].qos_profile = {
       RMW_QOS_POLICY_HISTORY_KEEP_ALL,
@@ -1014,7 +1102,18 @@ TEST(test_qos, test_qos_profile_get_best_available_for_publisher)
       RMW_QOS_LIFESPAN_DEFAULT,
       RMW_QOS_POLICY_LIVELINESS_AUTOMATIC,
       {2u, 0u},
-      false
+      false,
+      // ===================================================
+      /*
+      * FRoST Implementation of Ownership QoS
+      * -------------------------------------
+      * for all test cases: default ownership (shared) and no strength
+      */
+      // ownership implementation
+      RMW_QOS_POLICY_OWNERSHIP_SYSTEM_DEFAULT,
+      // no ownership strength
+      0
+      // ===================================================
     };
     rmw_qos_profile_t publisher_profile = rmw_qos_profile_best_available;
     rmw_ret_t ret = rmw_dds_common::qos_profile_get_best_available_for_publisher(
